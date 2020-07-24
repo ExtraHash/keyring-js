@@ -1,6 +1,6 @@
 {
   "name": "libvex-keyring",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple javascript module for generating and storing ed25519 keys, as well as signing, and verifying ed25519 signatures.",
   "main": "./dist/index.js",
   "author": "Extra <extrahash@protonmail.com>",
