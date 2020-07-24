@@ -3,7 +3,7 @@
 import { EventEmitter } from "events";
 import fs from "fs";
 import { sign, SignKeyPair } from "tweetnacl";
-import { KeyringUtils } from "./KeyringUtils";
+import { KeyRingUtils } from "./KeyRingUtils";
 
 /**
  * @ignore
@@ -115,7 +115,7 @@ export class KeyRing extends EventEmitter {
     super();
 
     if (secretKey instanceof Uint8Array) {
-      secretKey = KeyringUtils.encodeHex(secretKey);
+      secretKey = KeyRingUtils.encodeHex(secretKey);
     }
 
     this.memoryOnly = keyFolder === ":memory:";
@@ -131,7 +131,7 @@ export class KeyRing extends EventEmitter {
    * Signs a message with the keyring private key. You may provide the message as
    * a Uint8Array or a utf8, hex, or base64 encoded string. You will always receive back
    * a Uint8Array signature. If you need to convert this Uint8Array to another type, check
-   * the helper functions in the KeyringUtils class.
+   * the helper functions in the KeyRingUtils class.
    *
    * @param message - The message to sign.
    * @returns The resulting signature.
@@ -145,17 +145,17 @@ export class KeyRing extends EventEmitter {
         return sign.detached(message as Uint8Array, this.getPriv());
       case "utf8":
         return sign.detached(
-          KeyringUtils.decodeUTF8(message as string),
+          KeyRingUtils.decodeUTF8(message as string),
           this.getPriv()
         );
       case "hex":
         return sign.detached(
-          KeyringUtils.decodeHex(message as string),
+          KeyRingUtils.decodeHex(message as string),
           this.getPriv()
         );
       case "base64":
         return sign.detached(
-          KeyringUtils.decodeBase64(message as string),
+          KeyRingUtils.decodeBase64(message as string),
           this.getPriv()
         );
       default:
@@ -189,19 +189,19 @@ export class KeyRing extends EventEmitter {
         );
       case "utf8":
         return sign.detached.verify(
-          KeyringUtils.decodeUTF8(message as string),
+          KeyRingUtils.decodeUTF8(message as string),
           signature,
           publicKey
         );
       case "hex":
         return sign.detached.verify(
-          KeyringUtils.decodeHex(message as string),
+          KeyRingUtils.decodeHex(message as string),
           signature,
           publicKey
         );
       case "base64":
         return sign.detached.verify(
-          KeyringUtils.decodeBase64(message as string),
+          KeyRingUtils.decodeBase64(message as string),
           signature,
           publicKey
         );
@@ -234,11 +234,11 @@ export class KeyRing extends EventEmitter {
   public init(): void {
     if (this.memoryOnly) {
       this.signKeyPair = this.providedKey
-        ? sign.keyPair.fromSecretKey(KeyringUtils.decodeHex(this.providedKey))
+        ? sign.keyPair.fromSecretKey(KeyRingUtils.decodeHex(this.providedKey))
         : sign.keyPair();
 
       if (!this.providedKey) {
-        this.providedKey = KeyringUtils.encodeHex(this.signKeyPair.secretKey);
+        this.providedKey = KeyRingUtils.encodeHex(this.signKeyPair.secretKey);
       }
 
       this.emit("ready");
@@ -256,21 +256,21 @@ export class KeyRing extends EventEmitter {
         const signingKeys = sign.keyPair();
         fs.writeFileSync(
           this.pubKeyFile,
-          KeyringUtils.encodeHex(signingKeys.publicKey),
+          KeyRingUtils.encodeHex(signingKeys.publicKey),
           {
             encoding: "utf8",
           }
         );
         fs.writeFileSync(
           this.privKeyFile,
-          KeyringUtils.encodeHex(signingKeys.secretKey),
+          KeyRingUtils.encodeHex(signingKeys.secretKey),
           {
             encoding: "utf8",
           }
         );
       }
 
-      const priv = KeyringUtils.decodeHex(
+      const priv = KeyRingUtils.decodeHex(
         fs.readFileSync(this.privKeyFile, {
           encoding: "utf8",
         })

@@ -12,7 +12,7 @@ import {
  * Note that the methods are static so you do not need to initialize the class.
  */
 
-export class KeyringUtils {
+export class KeyRingUtils {
   /**
    * Encodes a Uint8Array to a utf8 string.
    *
