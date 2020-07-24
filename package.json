@@ -1,0 +1,47 @@
+{
+  "name": "libvex-keyring",
+  "version": "1.0.0",
+  "description": "A simple javascript module for generating and storing ed25519 keys, as well as signing, and verifying ed25519 signatures.",
+  "main": "./dist/index.js",
+  "author": "Extra <extrahash@protonmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./dist/index.js",
+    "build": "node ./scripts/versionUpdate.js; node ./node_modules/typescript/bin/tsc",
+    "prepack": "yarn build; yarn test;",
+    "docs": "npx typedoc --options typedoc.json",
+    "prettier": "node ./node_modules/prettier/bin-prettier.js '**/*.{ts,tsx,json,md}' --trailing-comma es5 --ignore-path .gitignore --arrow-parens always --write",
+    "lint": "./node_modules/tslint/bin/tslint src/**/*.ts{,x}",
+    "lint-fix": "./node_modules/tslint/bin/tslint src/**/*.ts{,x} --fix",
+    "test": "npx ts-node ./tests/ci.ts",
+    "dev": "npx ts-node ./tests/scratchpad.ts"
+  },
+  "devDependencies": {
+    "husky": "^3.1.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.10.2",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typedoc": "^0.17.8",
+    "typescript": "^3.9.5"
+  },
+  "lint-staged": {
+    "src/**/*.{ts}": [
+      "./node_modules/tslint/bin/tslint -c tslint.json --fix",
+      "git add"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "node ./scripts/versionUpdate.js; yarn prettier; git add --all; lint-staged"
+    }
+  },
+  "dependencies": {
+    "@types/node": "^14.0.14",
+    "chalk": "^4.1.0",
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-util": "^0.15.1",
+    "typedoc-plugin-no-inherit": "^1.1.10"
+  }
+}
